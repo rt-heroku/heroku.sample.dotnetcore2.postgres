@@ -3,7 +3,7 @@
 
 This uses the .Net Core Buildpack provided by Softtends and adds full support for Heroku Postgres<br>
 
-We've made some big updates in this release, so it’s **important** that you spend a few minutes to learn what’s new.
+We've made some big updates in this release, so itâ€™s **important** that you spend a few minutes to learn whatâ€™s new.
 
 You've created a new ASP.NET Core MVC project. [Learn what's new](https://go.microsoft.com/fwlink/?LinkId=518016)
 
@@ -34,7 +34,7 @@ In **project.json**
 You can deploy this ASP.Net MVC website on Heroku server by clicking below button
 <br/>
 <br/>
-<a href="https://heroku.com/deploy?template=https://github.com/somashekarg/postgressample-new/tree/master">
+<a href="https://heroku.com/deploy?template=https://github.com/heroku-softtrends/heroku.sample.dotnetcore2.postgres/tree/master">
   <img src="https://www.herokucdn.com/deploy/button.svg" alt="Deploy">
 </a>
 
