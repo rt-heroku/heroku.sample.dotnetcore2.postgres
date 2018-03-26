@@ -7,7 +7,7 @@ We've made some big updates in this release, so it’s **important** that you sp
 
 You've created a new ASP.NET Core MVC project. [Learn what's new](https://go.microsoft.com/fwlink/?LinkId=518016)
 
-You need to make the following changes in your Program.cs and Startup.cs to deploy on Heroku
+You need to make the following changes in your Program.cs to deploy on Heroku
 <br/>
 In **Program.cs**
 
@@ -23,38 +23,6 @@ public static void Main(string[] args
                 .UseStartup<Startup>()
                 .Build();
 }<br/>
-
-In **Startup.cs**
-
-	public void ConfigureServices(IServiceCollection services)
-        {
-            // Add framework services.
-            //services.AddApplicationInsightsTelemetry(Configuration);
-            services.AddMemoryCache(options =>
-            {
-                options.ExpirationScanFrequency = TimeSpan.FromMinutes(300);
-            });
-            services.AddSession();
-
-            services.AddMvc();
-
-            //Get Database Connection 
-            string _connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-            _connectionString.Replace("//", "");
-
-            char[] delimiterChars = { '/', ':', '@', '?' };
-            string[] strConn = _connectionString.Split(delimiterChars);
-            strConn = strConn.Where(x => !string.IsNullOrEmpty(x)).ToArray();
-
-            Config.User = strConn[1];
-            Config.Pass = strConn[2];
-            Config.Server = strConn[3];
-            Config.Database = strConn[5];
-            Config.Port = strConn[4];
-            Config.ConnectionString = "host=" + Config.Server + ";port=" + Config.Port + ";database=" + Config.Database + ";uid=" + Config.User + ";pwd=" + Config.Pass + ";sslmode=Require;Trust Server Certificate=true;Timeout=1000";
-
-        }
-<br/>
 <br/>
 You can deploy this ASP.Net MVC website on Heroku server by clicking below button
 <br/>
