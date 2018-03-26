@@ -1,13 +1,13 @@
 # Softtrends .NET Core 2.x Buildpack for Heroku with Heroku Postgres
 ## (Sample Code with Heroku Button deploying ASP.Net Core 2.x  + Heroku Postgres)
 
-This uses the .Net Core Buildpack provided by Softtends and adds full support for Heroku Postgres<br>
+This uses the .Net Core 2.x Buildpack provided by Softtends and adds full support for Heroku Postgres<br>
 
 We've made some big updates in this release, so it’s **important** that you spend a few minutes to learn what’s new.
 
 You've created a new ASP.NET Core MVC project. [Learn what's new](https://go.microsoft.com/fwlink/?LinkId=518016)
 
-You need to make the following changes in your Program.cs and project.json to deploy on Heroku
+You need to make the following changes in your Program.cs and Startup.cs to deploy on Heroku
 <br/>
 In **Program.cs**
 
@@ -15,20 +15,45 @@ In **Program.cs**
 <br/>
 public static void Main(string[] args
 {<br/>
-            var host = new WebHostBuilder()
-                .UseKestrel()
-                .UseContentRoot(Directory.GetCurrentDirectory())
-                .UseIISIntegration()
+            {
+            BuildWebHost(args).Run();
+        }
+                public static IWebHost BuildWebHost(string[] args) =>
+            WebHost.CreateDefaultBuilder(args)
                 .UseStartup<Startup>()
-                **.UseUrls(args[0])**
                 .Build();
-
-            host.Run();
 }<br/>
-In **project.json**
 
-*   Add a new property called "outputName": "Your_ProjectName" in buildOptions  
-*   Remove scripts section. It has prepublish and postpublish actions which are not needed
+In **Startup.cs**
+
+	public void ConfigureServices(IServiceCollection services)
+        {
+            // Add framework services.
+            //services.AddApplicationInsightsTelemetry(Configuration);
+            services.AddMemoryCache(options =>
+            {
+                options.ExpirationScanFrequency = TimeSpan.FromMinutes(300);
+            });
+            services.AddSession();
+
+            services.AddMvc();
+
+            //Get Database Connection 
+            string _connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
+            _connectionString.Replace("//", "");
+
+            char[] delimiterChars = { '/', ':', '@', '?' };
+            string[] strConn = _connectionString.Split(delimiterChars);
+            strConn = strConn.Where(x => !string.IsNullOrEmpty(x)).ToArray();
+
+            Config.User = strConn[1];
+            Config.Pass = strConn[2];
+            Config.Server = strConn[3];
+            Config.Database = strConn[5];
+            Config.Port = strConn[4];
+            Config.ConnectionString = "host=" + Config.Server + ";port=" + Config.Port + ";database=" + Config.Database + ";uid=" + Config.User + ";pwd=" + Config.Pass + ";sslmode=Require;Trust Server Certificate=true;Timeout=1000";
+
+        }
 <br/>
 <br/>
 You can deploy this ASP.Net MVC website on Heroku server by clicking below button
@@ -40,7 +65,7 @@ You can deploy this ASP.Net MVC website on Heroku server by clicking below butto
 
 ## This application consists of:
 
-*   Sample pages using ASP.NET Core MVC
+*   Sample pages using ASP.NET Core 2.x MVC
 *   [Gulp](https://go.microsoft.com/fwlink/?LinkId=518007) and [Bower](https://go.microsoft.com/fwlink/?LinkId=518004) for managing client-side libraries
 *   Theming using [Bootstrap](https://go.microsoft.com/fwlink/?LinkID=398939)
 
